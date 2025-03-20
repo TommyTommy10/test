@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buon Compleanno!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(45deg, #f3ec78, #af4261);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .phone {
+      width: 320px;
+      height: 650px;
+      background-color: #121212;
+      border-radius: 36px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+      border: 8px solid #2a2a2a;
+    }
+    
+    .screen {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      background: #000;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    
+    .notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      height: 30px;
+      background-color: #000;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      z-index: 10;
+    }
+    
+    .status-bar {
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 22px;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      background-color: #000;
+      position: relative;
+      z-index: 5;
+    }
+    
+    .home-screen {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      right: 0;
+      bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 15px;
+      overflow-y: auto;
+      background: url('https://source.unsplash.com/random/320x650/?stars') center/cover no-repeat;
+    }
+    
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 16px;
+      margin-top: 10px;
+    }
+    
+    .app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .app-icon {
+      width: 55px;
+      height: 55px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 22px;
+      margin-bottom: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .app-name {
+      font-size: 10px;
+      color: white;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    }
+    
+    .dock {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: rgba(30, 30, 30, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 0 0 24px 24px;
+      padding: 0 15px;
+    }
+    
+    .dock-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .app-screen {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #f2f2f7;
+      display: none;
+      flex-direction: column;
+      z-index: 20;
+      overflow: hidden;
+    }
+    
+    .app-header {
+      height: 50px;
+      background-color: #f2f2f7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 15px;
+      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+    }
+    
+    .back-btn {
+      font-weight: bold;
+      color: #007AFF;
+      cursor: pointer;
+    }
+    
+    .app-title {
+      font-size: 17px;
+      color: #333;
+    }
+    
+    .app-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+    
+    /* Notes App Styles */
+    .diary-entry {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .diary-date {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    
+    .diary-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    
+    .diary-content {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.4;
+    }
+    
+    /* Photos App Styles */
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 10px;
+    }
+    
+    .memory {
+      height: 150px;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+    
+    .memory img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .memory-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 8px;
+      font-size: 12px;
+    }
+    
+    /* Music App Styles */
+    .music-categories {
+      display: flex;
+      margin-bottom: 15px;
+    }
+    
+    .category {
+      padding: 8px 12px;
+      background-color: #007AFF;
+      color: white;
+      border-radius: 20px;
+      margin-right: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    .category.active {
+      background-color: #FF2D55;
+    }
+    
+    .song {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background-color: white;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .song-cover {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      margin-right: 12px;
+      background-color: #ddd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+    }
+    
+    .song-info {
+      flex: 1;
+    }
+    
+    .song-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: #333;
+    }
+    
+    .song-artist {
+      font-size: 12px;
+      color: #888;
+    }
+    
+    /* Calendar App Styles */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .month-year {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .days-of-week {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      margin-bottom: 5px;
+    }
+    
+    .day-name {
+      font-size: 12px;
+      color: #888;
+      padding: 5px;
+    }
+    
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-gap: 5px;
+    }
+    
+    .calendar-day {
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .birthday {
+      background-color: #FF2D55;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .birthday::after {
+      content: "🎂";
+      position: absolute;
+      font-size: 10px;
+      margin-top: 25px;
+    }
+    
+    .today {
+      border: 2px solid #007AFF;
+    }
+    
+    .other-month {
+      opacity: 0.3;
+    }
+    
+    /* Messages App Styles */
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .message.sent {
+      align-items: flex-end;
+    }
+    
+    .message.received {
+      align-items: flex-start;
+    }
+    
+    .message-bubble {
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 18px;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    
+    .sent .message-bubble {
+      background-color: #007AFF;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    
+    .received .message-bubble {
+      background-color: #E5E5EA;
+      color: #333;
+      border-bottom-left-radius: 4px;
+    }
+    
+    .message-time {
+      font-size: 10px;
+      color: #888;
+      margin: 2px 5px;
+    }
+    
+    /* Countdown App Styles */
+    .countdown-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .birthday-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 15px;
+      text-align: center;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .countdown-digits {
+      display: flex;
+      margin: 20px 0;
+    }
+    
+    .digit-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 10px;
+    }
+    
+    .digit {
+      width: 50px;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .digit-label {
+      margin-top: 5px;
+      font-size: 12px;
+      color: white;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .birthday-message {
+      margin-top: 20px;
+      font-size: 16px;
+      color: white;
+      text-align: center;
+      line-height: 1.4;
+      max-width: 80%;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .birthday-gif {
+      width: 100px;
+      height: 100px;
+      margin-top: 15px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span class="time">9:41</span>
+        <span class="battery">100%</span>
+      </div>
+      
+      <!-- Home Screen -->
+      <div class="home-screen" id="home-screen">
+        <div class="app-grid">
+          <div class="app" onclick="openApp('notes')">
+            <div class="app-icon" style="background-color: #FF9500;">📝</div>
+            <div class="app-name">Diario</div>
+          </div>
+          <div class="app" onclick="openApp('photos')">
+            <div class="app-icon" style="background-color: #5856D6;">🖼️</div>
+            <div class="app-name">Ricordi</div>
+          </div>
+          <div class="app" onclick="openApp('music')">
+            <div class="app-icon" style="background-color: #FF2D55;">🎵</div>
+            <div class="app-name">Musica</div>
+          </div>
+          <div class="app" onclick="openApp('calendar')">
+            <div class="app-icon" style="background-color: #4CD964;">📅</div>
+            <div class="app-name">Calendario</div>
+          </div>
+          <div class="app" onclick="openApp('messages')">
+            <div class="app-icon" style="background-color: #007AFF;">💬</div>
+            <div class="app-name">Messaggi</div>
+          </div>
+          <div class="app" onclick="openApp('countdown')">
+            <div class="app-icon" style="background-color: #FF3B30;">🎂</div>
+            <div class="app-name">Countdown</div>
+          </div>
+          <div class="app" onclick="alert('Buon Compleanno! 🎉')">
+            <div class="app-icon" style="background-color: #007AFF;">🎉</div>
+            <div class="app-name">Sorpresa</div>
+          </div>
+          <div class="app" onclick="alert('Ti voglio bene! ❤️')">
+            <div class="app-icon" style="background-color: #FF2D55;">❤️</div>
+            <div class="app-name">Cuore</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="dock">
+        <div class="dock-icon" style="background-color: #FF9500;" onclick="openApp('notes')">📝</div>
+        <div class="dock-icon" style="background-color: #5856D6;" onclick="openApp('photos')">🖼️</div>
+        <div class="dock-icon" style="background-color: #FF2D55;" onclick="openApp('music')">🎵</div>
+        <div class="dock-icon" style="background-color: #4CD964;" onclick="openApp('calendar')">📅</div>
+      </div>
+      
+      <!-- Notes App -->
+      <div class="app-screen" id="notes-app">
+        <div class="app-header">
+          <div class="back-btn" onclick="closeApp('notes')">Indietro</div>
+          <div class="app-title">Diario</div>
+          <div></div>
+        </div>
+        <div class="app-content">
+          <div class="diary-entry">
+            <div class="diary-date">24 Giugno 2024</div>
+            <div class="diary-title">Buon Compleanno! 🎂</div>
+            <div class="diary-content">
+              Oggi è il tuo compleanno e volevo crearti qualcosa di speciale. Tra tutti i ricordi che abbiamo vissuto insieme, volevo regalarti un modo per tenerli sempre con te. Spero che questo piccolo "telefono virtuale" ti faccia sorridere. Sei una persona speciale nella mia vita.
+            </div>
+          </div>
+          <div class="diary-entry">
+            <div class="diary-date">23 Giugno 2024</div>
+            <div class="diary-title">Preparazione 🎁</div>
+            <div class="diary-content">
+              Sto preparando tutto per il tuo compleanno. Non vedo l'ora di festeggiare con te! Ho pensato a lungo a cosa regalarti e spero che questo regalo speciale ti piaccia.
+            </div>
+          </div>
+          <div class="diary-entry">
+            <div class="diary-date">15 Maggio 2024</div>
+            <div class="diary-title">Ricordi 💭</div>
+            <div class="diary-content">
+              Oggi stavo ripensando a tutte le avventure che abbiamo vissuto insieme. Dai momenti più divertenti a quelli più difficili, ci siamo sempre sostenuti a vicenda. La nostra amicizia è davvero speciale.
+            </div>
+          </div>
+          <div class="diary-entry">
+            <div class="diary-date">1 Aprile 2024</div>
+            <div class="diary-title">Scherzi e Risate 😂</div>
+            <div class="diary-content">
+              Oggi ti ho fatto uno scherzo per il pesce d'aprile! La tua reazione è stata impagabile. Mi piace come riusciamo sempre a ridere insieme anche nelle situazioni più assurde.
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Photos App -->
+      <div class="app-screen" id="photos-app">
+        <div class="app-header">
+          <div class="back-btn" onclick="closeApp('photos')">Indietro</div>
+          <div class="app-title">Ricordi</div>
+          <div></div>
+        </div>
+        <div class="app-content">
+          <div class="photos-grid">
+            <div class="memory">
+              <img src="/api/placeholder/400/320" alt="Ricordo 1">
+              <div class="memory-caption">Il nostro primo viaggio insieme</div>
+            </div>
+            <div class="memory">
+              <img src="/api/placeholder/400/320" alt="Ricordo 2">
+              <div class="memory-caption">Festa di Capodanno 2024</div>
+            </div>
+            <div class="memory">
+              <img src="/api/placeholder/400/320" alt="Ricordo 3">
+              <div class="memory-caption">Quella volta al concerto</div>
+            </div>
+            <div class="memory">
+              <img src="/api/placeholder/400/320" alt="Ricordo 4">
+              <div class="memory-caption">Giornata al mare</div>
+            </div>
+            <div class="memory">
+              <img src="/api/placeholder/400/320" alt="Ricordo 5">
+              <div class="memory-caption">Il tuo compleanno scorso</div>
+            </div>
+            <div class="memory">
+              <img src="/api/placeholder/400/320" alt="Ricordo 6">
+              <div class="memory-caption">Serata cinema</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Music App -->
+      <div class="app-screen" id="music-app">
+        <div class="app-header">
+          <div class="back-btn" onclick="closeApp('music')">Indietro</div>
+          <div class="app-title">Musica</div>
+          <div></div>
+        </div>
+        <div class="app-content">
+          <div class="music-categories">
+            <div class="category active" id="yours-btn" onclick="switchMusicCategory('yours')">Yours</div>
+            <div class="category" id="mine-btn" onclick="switchMusicCategory('mine')">Mine</div>
+          </div>
+          
+          <div id="yours-playlist">
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">La tua canzone preferita</div>
+                <div class="song-artist">Il tuo artista preferito</div>
+              </div>
+            </div>
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">Quella canzone che cantiamo sempre</div>
+                <div class="song-artist">Artista Famoso</div>
+              </div>
+            </div>
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">La canzone che mi hai fatto scoprire</div>
+                <div class="song-artist">Band Indie</div>
+              </div>
+            </div>
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">La tua hit dell'estate</div>
+                <div class="song-artist">Pop Star</div>
+              </div>
+            </div>
+          </div>
+          
+          <div id="mine-playlist" style="display: none;">
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">La mia canzone preferita</div>
+                <div class="song-artist">Il mio artista preferito</div>
+              </div>
+            </div>
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">Quella che ascolto quando penso a te</div>
+                <div class="song-artist">Cantautore Famoso</div>
+              </div>
+            </div>
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">La canzone che mi ricorda di noi</div>
+                <div class="song-artist">Rock Band</div>
+              </div>
+            </div>
+            <div class="song">
+              <div class="song-cover">🎵</div>
+              <div class="song-info">
+                <div class="song-title">La colonna sonora della nostra amicizia</div>
+                <div class="song-artist">Duo Musicale</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Calendar App -->
+      <div class="app-screen" id="calendar-app">
+        <div class="app-header">
+          <div class="back-btn" onclick="closeApp('calendar')">Indietro</div>
+          <div class="app-title">Calendario</div>
+          <div></div>
+        </div>
+        <div class="app-content">
+          <div class="calendar-header">
+            <div class="month-year">Giugno 2024</div>
+          </div>
+          <div class="days-of-week">
+            <div class="day-name">Lun</div>
+            <div class="day-name">Mar</div>
+            <div class="day-name">Mer</div>
+            <div class="day-name">Gio</div>
+            <div class="day-name">Ven</div>
+            <div class="day-name">Sab</div>
+            <div class="day-name">Dom</div>
+          </div>
+          <div class="calendar-grid">
+            <!-- Week 1 -->
+            <div class="calendar-day other-month">27</div>
+            <div class="calendar-day other-month">28</div>
+            <div class="calendar-day other-month">29</div>
+            <div class="calendar-day other-month">30</div>
+            <div class="calendar-day other-month">31</div>
+            <div class="calendar-day">1</div>
+            <div class="calendar-day">2</div>
+            <!-- Week 2 -->
+            <div class="calendar-day">3</div>
+            <div class="calendar-day">4</div>
+            <div class="calendar-day">5</div>
+            <div class="calendar-day">6</div>
+            <div class="calendar-day">7</div>
+            <div class="calendar-day">8</div>
+            <div class="calendar-day">9</div>
+            <!-- Week 3 -->
+            <div class="calendar-day">10</div>
+            <div class="calendar-day">11</div>
+            <div class="calendar-day">12</div>
+            <div class="calendar-day">13</div>
+            <div class="calendar-day">14</div>
+            <div class="calendar-day">15</div>
+            <div class="calendar-day">16</div>
+            <!-- Week 4 -->
+            <div class="calendar-day">17</div>
+            <div class="calendar-day">18</div>
+            <div class="calendar-day">19</div>
+            <div class="calendar-day">20</div>
+            <div class="calendar-day today">21</div>
+            <div class="calendar-day">22</div>
+            <div class="calendar-day">23</div>
+            <!-- Week 5 -->
+            <div class="calendar-day birthday">24</div>
+            <div class="calendar-day">25</div>
+            <div class="calendar-day">26</div>
+            <div class="calendar-day">27</div>
+            <div class="calendar-day">28</div>
+            <div class="calendar-day">29</div>
+            <div class="calendar-day">30</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Messages App -->
+      <div class="app-screen" id="messages-app">
+        <div class="app-header">
+          <div class="back-btn" onclick="closeApp('messages')">Indietro</div>
+          <div class="app-title">Messaggi</div>
+          <div></div>
+        </div>
+        <div class="app-content">
+          <div class="message received">
+            <div class="message-bubble">Ciao! Come stai?</div>
+            <div class="message-time">10:15</div>
+          </div>
+          <div class="message sent">
+            <div class="message-bubble">Tutto bene! E tu?</div>
+            <div class="message-time">10:17</div>
+          </div>
+          <div class="message received">
+            <div class="message-bubble">Bene grazie! Hai dei programmi per il tuo compleanno?</div>
+            <div class="message-time">10:19</div>
+          </div>
+          <div class="message sent">
+            <div class="message-bubble">Ancora non so! Mi piacerebbe festeggiare con gli amici...</div>
+            <div class="message-time">10:22</div>
+          </div>
+          <div class="message received">
+            <div class="message-bubble">Ho un regalo speciale per te! 🎁</div>
+            <div class="message-time">10:23</div>
+          </div>
+          <div class="message sent">
+            <div class="message-bubble">Davvero? Non vedo l'ora! 😍</div>
+            <div class="message-time">10:25</div>
+          </div>
+          <div class="message received">
+            <div class="message-bubble">Ti voglio bene! Buon compleanno in anticipo! 🎉</div>
+            <div class="message-time">10:26</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Countdown App -->
+      <div class="app-screen" id="countdown-app">
+        <div class="app-header">
+          <div class="back-btn" onclick="closeApp('countdown')">Indietro</div>
+          <div class="app-title">Countdown Compleanno</div>
+          <div></div>
+        </div>
+        <div class="app-content">
+          <div class="countdown-container">
+            <div class="birthday-title">Buon Compleanno! 🎂</div>
+            <div id="countdown-display">
+              <div class="countdown-digits">
+                <div class="digit-container">
+                  <div class="digit" id="days">00</div>
+                  <div class="digit-label">Giorni</div>
+                </div>
+                <div class="digit-container">
+                 <div class="digit" id="hours">00</div>
+                  <div class="digit-label">Ore</div>
+                </div>
+                <div class="digit-container">
+                  <div class="digit" id="minutes">00</div>
+                  <div class="digit-label">Minuti</div>
+                </div>
+                <div class="digit-container">
+                  <div class="digit" id="seconds">00</div>
+                  <div class="digit-label">Secondi</div>
+                </div>
+              </div>
+            </div>
+            <div class="birthday-message">
+              Tanti auguri di buon compleanno! Ogni momento passato insieme è un tesoro per me. Grazie per essere una persona così speciale nella mia vita.
+            </div>
+            <div class="birthday-gif">
+              <img src="/api/placeholder/100/100" alt="Birthday celebration">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Open and close apps
+    function openApp(appName) {
+      document.getElementById('home-screen').style.display = 'none';
+      document.getElementById(appName + '-app').style.display = 'flex';
+    }
+    
+    function closeApp(appName) {
+      document.getElementById(appName + '-app').style.display = 'none';
+      document.getElementById('home-screen').style.display = 'flex';
+    }
+    
+    // Switch music categories
+    function switchMusicCategory(category) {
+      if (category === 'yours') {
+        document.getElementById('yours-playlist').style.display = 'block';
+        document.getElementById('mine-playlist').style.display = 'none';
+        document.getElementById('yours-btn').classList.add('active');
+        document.getElementById('mine-btn').classList.remove('active');
+      } else {
+        document.getElementById('yours-playlist').style.display = 'none';
+        document.getElementById('mine-playlist').style.display = 'block';
+        document.getElementById('yours-btn').classList.remove('active');
+        document.getElementById('mine-btn').classList.add('active');
+      }
+    }
+    
+    // Countdown timer
+    function updateCountdown() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const birthdayDate = new Date(currentYear, 5, 24); // June 24 (month is 0-indexed)
+      
+      // If birthday already passed this year, set for next year
+      if (now > birthdayDate) {
+        birthdayDate.setFullYear(currentYear + 1);
+      }
+      
+      const diff = birthdayDate - now;
+      
+      // Calculate days, hours, minutes, seconds
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      // Update the countdown display
+      document.getElementById('days').innerText = days.toString().padStart(2, '0');
+      document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+    }
+    
+    // Update countdown every second
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Update time in status bar
+    function updateTime() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.querySelector('.time').innerText = `${hours}:${minutes}`;
+    }
+    
+    updateTime();
+    setInterval(updateTime, 60000);
+  </script>
+</body>
+</html>
