@@ -666,6 +666,142 @@
     margin: 0 10px 10px 10px;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+    /* Effetti meteo */
+.weather-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.rain {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(transparent, rgba(255,255,255,0.5));
+    animation: rain 0.5s linear infinite;
+}
+
+@keyframes rain {
+    0% { transform: translateY(-100px); }
+    100% { transform: translateY(650px); }
+}
+
+/* Widget Styles */
+.widget-container {
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.widget {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+}
+
+.weather-widget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.weather-info {
+    display: flex;
+    align-items: center;
+}
+
+.weather-temp {
+    font-size: 36px;
+    margin-right: 10px;
+}
+
+.weather-details {
+    font-size: 14px;
+}
+
+/* Gesture Indicator */
+.gesture-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    transition: opacity 0.3s;
+}
+
+/* Sound Control */
+.volume-slider {
+    position: absolute;
+    top: 50%;
+    right: -100px;
+    transform: translateY(-50%);
+    width: 200px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    transition: right 0.3s;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.volume-slider.active {
+    right: 20px;
+}
+
+/* Theme Switcher */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+/* App Switching Animation */
+.app-switcher {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 999;
+}
+
+.app-preview {
+    position: relative;
+    width: 80%;
+    height: 70%;
+    margin: 20px auto;
+    background: white;
+    border-radius: 15px;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.app-preview.active {
+    transform: scale(1);
+}
   </style>
 </head>
 <body>
@@ -714,6 +850,42 @@
           </div>
         </div>
       </div>
+
+      <div class="widget-container">
+    <div class="widget weather-widget">
+        <div class="weather-info">
+            <div class="weather-temp">22°</div>
+            <div class="weather-details">
+                <div>Soleggiato</div>
+                <div>Umidità: 45%</div>
+            </div>
+        </div>
+        <div class="weather-icon">☀️</div>
+    </div>
+    
+    <div class="widget music-widget">
+        <div style="display: flex; align-items: center;">
+            <div style="width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 8px; margin-right: 10px;"></div>
+            <div>
+                <div style="font-weight: bold;">La tua canzone preferita</div>
+                <div style="font-size: 12px; opacity: 0.8;">Artista - Album</div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+            <span>⏮️</span>
+            <span style="font-size: 24px;">⏸️</span>
+            <span>⏭️</span>
+        </div>
+    </div>
+</div>
+
+<div class="gesture-hint"></div>
+<div class="volume-slider">
+    <input type="range" min="0" max="100" value="50" style="width: 100%;">
+</div>
+<div class="theme-toggle">🌓</div>
+
+<div class="weather-effect"></div>
       
       <div class="dock">
         <div class="dock-icon" style="background-color: #FF9500;" onclick="openApp('notes')">📝</div>
@@ -1309,6 +1481,114 @@ document.addEventListener('DOMContentLoaded', () => {
 document.querySelectorAll('.app, .dock-icon').forEach(element => {
     element.addEventListener('touchstart', vibrateDevice);
 });
+
+    // Effetti sonori
+const sounds = {
+    tap: new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAW7TUp2OAAAAAAAAAAAAAAAAAAAA//tYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
+    open: new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAW7TUp2OAAAAAAAAAAAAAAAAAAAA//tYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
+    close: new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAAFbgBra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2t//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAW7TUp2OAAAAAAAAAAAAAAAAAAAA//tYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+};
+
+// Riproduce suono
+function playSound(soundName) {
+    sounds[soundName].currentTime = 0;
+    sounds[soundName].play();
+}
+
+// Gestione effetti meteo
+function createWeatherEffect() {
+    const weatherEffect = document.querySelector('.weather-effect');
+    for(let i = 0; i < 50; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'rain';
+        drop.style.left = Math.random() * 100 + '%';
+        drop.style.animationDelay = Math.random() * 2 + 's';
+        weatherEffect.appendChild(drop);
+    }
+}
+
+// Gesture per chiudere le app
+let touchStartY = 0;
+document.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener('touchmove', e => {
+    const touchY = e.touches[0].clientY;
+    const diff = touchY - touchStartY;
+    
+    if(diff > 100) {
+        const currentApp = document.querySelector('.app-screen[style*="flex"]');
+        if(currentApp) {
+            closeApp(currentApp.id.replace('-app', ''));
+            playSound('close');
+        }
+    }
+});
+
+// Tema dinamico
+function updateTheme() {
+    const hour = new Date().getHours();
+    const isDark = hour < 6 || hour > 18;
+    document.documentElement.style.setProperty('--theme-bg', 
+        isDark ? '#000' : '#fff');
+    document.documentElement.style.setProperty('--theme-text', 
+        isDark ? '#fff' : '#000');
+}
+
+// Controllo volume con gesture
+let volumeTimeout;
+document.addEventListener('touchstart', e => {
+    if(e.touches.length === 2) {
+        const slider = document.querySelector('.volume-slider');
+        slider.classList.add('active');
+        clearTimeout(volumeTimeout);
+        volumeTimeout = setTimeout(() => {
+            slider.classList.remove('active');
+        }, 3000);
+    }
+});
+
+// Widget meteo interattivo
+function updateWeather() {
+    fetch('https://api.openweathermap.org/data/2.5/weather?q=Your,City&appid=YOUR_API_KEY&units=metric')
+        .then(res => res.json())
+        .then(data => {
+            const widget = document.querySelector('.weather-widget');
+            widget.querySelector('.weather-temp').textContent = 
+                Math.round(data.main.temp) + '°';
+            widget.querySelector('.weather-details div:first-child').textContent = 
+                data.weather[0].main;
+            widget.querySelector('.weather-details div:last-child').textContent = 
+                `Umidità: ${data.main.humidity}%`;
+        })
+        .catch(() => {
+            // Usa dati di fallback se l'API non funziona
+        });
+}
+
+// Inizializzazione
+document.addEventListener('DOMContentLoaded', () => {
+    createWeatherEffect();
+    updateTheme();
+    setInterval(updateTheme, 60000);
+    updateWeather();
+    setInterval(updateWeather, 600000);
+    
+    // Aggiungi suoni alle interazioni
+    document.querySelectorAll('.app, .dock-icon').forEach(el => {
+        el.addEventListener('click', () => playSound('tap'));
+    });
+});
+
+// Aggiorna la data di compleanno
+const birthdayDate = new Date('2025-06-24');
+const now = new Date();
+const diff = birthdayDate - now;
+const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+document.querySelector('.birthday-message').textContent = 
+    `Mancano ${days} giorni al tuo compleanno!`;
   </script>
 </body>
 </html>
