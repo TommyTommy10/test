@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -73,6 +72,129 @@
       position: relative;
       z-index: 5;
     }
+
+    .status-bar {
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    color: white;
+    font-size: 14px;
+    background-color: transparent;
+    position: relative;
+    z-index: 5;
+}
+
+.status-left, .status-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-right {
+    justify-content: flex-end;
+}
+
+.status-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    width: 40%;
+}
+
+/* Widget Control Center */
+.control-center {
+    position: absolute;
+    top: -400px;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    transition: top 0.3s ease;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 20px;
+}
+
+.control-center.active {
+    top: 0;
+}
+
+.quick-toggles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.quick-toggle {
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.quick-toggle.active {
+    background: #0A84FF;
+}
+
+.quick-toggle-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.quick-toggle-label {
+    font-size: 12px;
+}
+
+.sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.slider-item {
+    display: flex;
+    align-items: center;
+    color: white;
+    gap: 15px;
+}
+
+.slider-icon {
+    font-size: 20px;
+    width: 30px;
+    text-align: center;
+}
+
+.slider-control {
+    flex: 1;
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
     
     .home-screen {
       position: absolute;
@@ -307,69 +429,106 @@
       color: #888;
     }
     
-    /* Calendar App Styles */
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    
-    .month-year {
-      font-size: 18px;
-      font-weight: bold;
-      color: #333;
-    }
-    
-    .days-of-week {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      text-align: center;
-      margin-bottom: 5px;
-    }
-    
-    .day-name {
-      font-size: 12px;
-      color: #888;
-      padding: 5px;
-    }
-    
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-gap: 5px;
-    }
-    
-    .calendar-day {
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-      font-size: 14px;
-      color: #333;
-    }
-    
-    .birthday {
-      background-color: #FF2D55;
-      color: white;
-      font-weight: bold;
-    }
-    
-    .birthday::after {
-      content: "🎂";
-      position: absolute;
-      font-size: 10px;
-      margin-top: 25px;
-    }
-    
-    .today {
-      border: 2px solid #007AFF;
-    }
-    
-    .other-month {
-      opacity: 0.3;
-    }
+  /* Stili calendario aggiornati */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f8f8f8;
+}
+
+.calendar-header button {
+    border: none;
+    background: none;
+    font-size: 18px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #007AFF;
+}
+
+.calendar-today-btn {
+    color: #007AFF;
+    cursor: pointer;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #e0e0e0;
+    padding: 1px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+}
+
+.calendar-day:hover {
+    background: #f0f0f0;
+}
+
+.calendar-day.selected {
+    background: #007AFF;
+    color: white;
+}
+
+.calendar-day.today {
+    font-weight: bold;
+    color: #007AFF;
+}
+
+.calendar-day.today.selected {
+    color: white;
+}
+
+.calendar-day.has-events::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #FF3B30;
+}
+
+.calendar-events {
+    padding: 15px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.calendar-event {
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.event-time {
+    font-size: 12px;
+    color: #8e8e93;
+    margin-bottom: 4px;
+}
+
+.event-title {
+    font-size: 14px;
+    color: #000;
+}
+
+.no-events {
+    text-align: center;
+    color: #8e8e93;
+    padding: 20px;
+}
     
     /* Messages App Styles */
     .message {
@@ -674,10 +833,70 @@
     <div class="screen">
       <div class="notch"></div>
       <div class="status-bar">
-        <span class="time">9:41</span>
+    <div class="status-left">
+        <span class="time">--:--</span>
+    </div>
+    <div class="status-center">
+        <div class="notch"></div>
+    </div>
+    <div class="status-right">
+        <span class="signal">📶</span>
+        <span class="wifi">📡</span>
         <span class="battery">100%</span>
-      </div>
-      
+    </div>
+        
+</div>
+      <div class="control-center" id="controlCenter">
+    <div class="quick-toggles">
+        <div class="quick-toggle active">
+            <div class="quick-toggle-icon">📶</div>
+            <div class="quick-toggle-label">Rete</div>
+        </div>
+        <div class="quick-toggle active">
+            <div class="quick-toggle-icon">📡</div>
+            <div class="quick-toggle-label">Wi-Fi</div>
+        </div>
+        <div class="quick-toggle">
+            <div class="quick-toggle-icon">🔵</div>
+            <div class="quick-toggle-label">Bluetooth</div>
+        </div>
+        <div class="quick-toggle">
+            <div class="quick-toggle-icon">✈️</div>
+            <div class="quick-toggle-label">Aereo</div>
+        </div>
+        <div class="quick-toggle">
+            <div class="quick-toggle-icon">🌙</div>
+            <div class="quick-toggle-label">Non disturbare</div>
+        </div>
+        <div class="quick-toggle">
+            <div class="quick-toggle-icon">📱</div>
+            <div class="quick-toggle-label">Rotazione</div>
+        </div>
+        <div class="quick-toggle active">
+            <div class="quick-toggle-icon">🔆</div>
+            <div class="quick-toggle-label">Luminosità</div>
+        </div>
+        <div class="quick-toggle">
+            <div class="quick-toggle-icon">🌓</div>
+            <div class="quick-toggle-label">Tema</div>
+        </div>
+    </div>
+    
+    <div class="sliders">
+        <div class="slider-item">
+            <div class="slider-icon">🔆</div>
+            <div class="slider-control">
+                <input type="range" min="0" max="100" value="80">
+            </div>
+        </div>
+        <div class="slider-item">
+            <div class="slider-icon">🔊</div>
+            <div class="slider-control">
+                <input type="range" min="0" max="100" value="50">
+            </div>
+        </div>
+    </div>
+</div>
       <!-- Home Screen -->
       <div class="home-screen" id="home-screen">
         <div class="app-grid">
@@ -709,8 +928,8 @@
             <div class="app-icon" style="background-color: #007AFF;">🎉</div>
             <div class="app-name">Sorpresa</div>
           </div>
-          <div class="app" onclick="alert('Ti voglio bene! ❤️')">
-            <div class="app-icon" style="background-color: #FF2D55;">❤️</div>
+          <div class="app" onclick="alert('Ti voglio bene! 🩶')">
+            <div class="app-icon" style="background-color: #FF2D55;">🩶</div>
             <div class="app-name">Cuore</div>
           </div>
         </div>
@@ -876,18 +1095,19 @@
         </div>
       </div>
       
-      <!-- Calendar App -->
-      <div class="app-screen" id="calendar-app">
-        <div class="app-header">
-          <div class="back-btn" onclick="closeApp('calendar')">Indietro</div>
-          <div class="app-title">Calendario</div>
-          <div></div>
+ <div class="app-screen" id="calendar-app">
+    <div class="app-header">
+        <div class="back-btn" onclick="closeApp('calendar')">Indietro</div>
+        <div class="app-title">Calendario</div>
+        <div class="calendar-today-btn" onclick="goToToday()">Oggi</div>
+    </div>
+    <div class="app-content">
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)">◀</button>
+            <div class="month-year" id="monthYear"></div>
+            <button onclick="changeMonth(1)">▶</button>
         </div>
-        <div class="app-content">
-          <div class="calendar-header">
-            <div class="month-year">Giugno 2024</div>
-          </div>
-          <div class="days-of-week">
+        <div class="days-of-week">
             <div class="day-name">Lun</div>
             <div class="day-name">Mar</div>
             <div class="day-name">Mer</div>
@@ -895,51 +1115,14 @@
             <div class="day-name">Ven</div>
             <div class="day-name">Sab</div>
             <div class="day-name">Dom</div>
-          </div>
-          <div class="calendar-grid">
-            <!-- Week 1 -->
-            <div class="calendar-day other-month">27</div>
-            <div class="calendar-day other-month">28</div>
-            <div class="calendar-day other-month">29</div>
-            <div class="calendar-day other-month">30</div>
-            <div class="calendar-day other-month">31</div>
-            <div class="calendar-day">1</div>
-            <div class="calendar-day">2</div>
-            <!-- Week 2 -->
-            <div class="calendar-day">3</div>
-            <div class="calendar-day">4</div>
-            <div class="calendar-day">5</div>
-            <div class="calendar-day">6</div>
-            <div class="calendar-day">7</div>
-            <div class="calendar-day">8</div>
-            <div class="calendar-day">9</div>
-            <!-- Week 3 -->
-            <div class="calendar-day">10</div>
-            <div class="calendar-day">11</div>
-            <div class="calendar-day">12</div>
-            <div class="calendar-day">13</div>
-            <div class="calendar-day">14</div>
-            <div class="calendar-day">15</div>
-            <div class="calendar-day">16</div>
-            <!-- Week 4 -->
-            <div class="calendar-day">17</div>
-            <div class="calendar-day">18</div>
-            <div class="calendar-day">19</div>
-            <div class="calendar-day">20</div>
-            <div class="calendar-day today">21</div>
-            <div class="calendar-day">22</div>
-            <div class="calendar-day">23</div>
-            <!-- Week 5 -->
-            <div class="calendar-day birthday">24</div>
-            <div class="calendar-day">25</div>
-            <div class="calendar-day">26</div>
-            <div class="calendar-day">27</div>
-            <div class="calendar-day">28</div>
-            <div class="calendar-day">29</div>
-            <div class="calendar-day">30</div>
-          </div>
         </div>
-      </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="calendar-events" id="calendarEvents">
+            <h3>Eventi di oggi</h3>
+            <div class="events-list"></div>
+        </div>
+    </div>
+</div>
       
       <!-- Messages App -->
       <div class="app-screen" id="messages-app">
@@ -1079,16 +1262,76 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
     
-    // Update time in status bar
-    function updateTime() {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      document.querySelector('.time').innerText = `${hours}:${minutes}`;
+// Aggiorna l'ora nella status bar
+function updateTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    document.querySelector('.status-bar .time').innerText = `${hours}:${minutes}`;
+}
+
+// Aggiorna la batteria
+function updateBattery() {
+    if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+            const level = Math.round(battery.level * 100);
+            document.querySelector('.status-bar .battery').innerText = `${level}%`;
+        });
     }
+}
+
+// Control Center
+let controlCenterVisible = false;
+let touchStartY = 0;
+
+document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener('touchmove', (e) => {
+    const touchY = e.touches[0].clientY;
+    const deltaY = touchY - touchStartY;
+    const controlCenter = document.getElementById('controlCenter');
     
+    // Se il tocco inizia nella parte superiore dello schermo
+    if (touchStartY < 44) {
+        if (deltaY > 0) { // Swipe verso il basso
+            controlCenter.style.top = `${Math.min(0, -400 + deltaY)}px`;
+        }
+    } else if (controlCenterVisible) {
+        if (deltaY < 0) { // Swipe verso l'alto
+            controlCenter.style.top = `${Math.max(-400, deltaY)}px`;
+        }
+    }
+});
+
+document.addEventListener('touchend', (e) => {
+    const controlCenter = document.getElementById('controlCenter');
+    const currentTop = parseInt(controlCenter.style.top || -400);
+    
+    if (currentTop > -200) {
+        controlCenter.style.top = '0px';
+        controlCenterVisible = true;
+    } else {
+        controlCenter.style.top = '-400px';
+        controlCenterVisible = false;
+    }
+});
+
+// Toggle dei quick settings
+document.querySelectorAll('.quick-toggle').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        toggle.classList.toggle('active');
+    });
+});
+
+// Inizializzazione
+document.addEventListener('DOMContentLoaded', () => {
     updateTime();
-    setInterval(updateTime, 60000);
+    updateBattery();
+    setInterval(updateTime, 1000);
+    setInterval(updateBattery, 30000);
+});
 
     // Lock Screen functionality
 let currentPin = '';
@@ -1310,6 +1553,125 @@ document.addEventListener('DOMContentLoaded', () => {
 document.querySelectorAll('.app, .dock-icon').forEach(element => {
     element.addEventListener('touchstart', vibrateDevice);
 });
+
+    // Calendario
+let currentDate = new Date();
+let selectedDate = new Date();
+const events = {
+    '2025-06-24': [
+        { title: '🎂 Il tuo compleanno!', time: '00:00', color: '#FF2D55' }
+    ]
+};
+
+function updateCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    document.getElementById('monthYear').textContent = 
+        new Date(year, month).toLocaleString('it-IT', { month: 'long', year: 'numeric' });
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const firstDayIndex = (firstDay.getDay() + 6) % 7; // Lunedì come primo giorno
+    
+    const grid = document.getElementById('calendarGrid');
+    grid.innerHTML = '';
+    
+    // Giorni del mese precedente
+    const prevMonth = new Date(year, month - 1, 1);
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+    for (let i = 0; i < firstDayIndex; i++) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day other-month';
+        day.textContent = daysInPrevMonth - firstDayIndex + i + 1;
+        grid.appendChild(day);
+    }
+    
+    // Giorni del mese corrente
+    for (let i = 1; i <= daysInMonth; i++) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day';
+        day.textContent = i;
+        
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        if (events[dateStr]) {
+            day.classList.add('has-events');
+        }
+        
+        if (i === new Date().getDate() && 
+            month === new Date().getMonth() && 
+            year === new Date().getFullYear()) {
+            day.classList.add('today');
+        }
+        
+        if (i === selectedDate.getDate() && 
+            month === selectedDate.getMonth() && 
+            year === selectedDate.getFullYear()) {
+            day.classList.add('selected');
+        }
+        
+        day.addEventListener('click', () => selectDate(new Date(year, month, i)));
+        grid.appendChild(day);
+    }
+    
+    // Giorni del mese successivo
+    const totalDays = firstDayIndex + daysInMonth;
+    const remainingDays = 42 - totalDays; // 6 righe x 7 giorni = 42
+    
+    for (let i = 1; i <= remainingDays; i++) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day other-month';
+        day.textContent = i;
+        grid.appendChild(day);
+    }
+    
+    updateEvents();
+}
+
+function selectDate(date) {
+    selectedDate = date;
+    updateCalendar();
+    updateEvents();
+}
+
+function changeMonth(delta) {
+    currentDate.setMonth(currentDate.getMonth() + delta);
+    updateCalendar();
+}
+
+function goToToday() {
+    currentDate = new Date();
+    selectedDate = new Date();
+    updateCalendar();
+}
+
+function updateEvents() {
+    const eventsList = document.querySelector('.events-list');
+    eventsList.innerHTML = '';
+    
+    const dateStr = selectedDate.toISOString().split('T')[0];
+    const dayEvents = events[dateStr] || [];
+    
+    if (dayEvents.length === 0) {
+        eventsList.innerHTML = '<p class="no-events">Nessun evento per oggi</p>';
+        return;
+    }
+    
+    dayEvents.forEach(event => {
+        const eventEl = document.createElement('div');
+        eventEl.className = 'calendar-event';
+        eventEl.style.borderLeft = `4px solid ${event.color}`;
+        eventEl.innerHTML = `
+            <div class="event-time">${event.time}</div>
+            <div class="event-title">${event.title}</div>
+        `;
+        eventsList.appendChild(eventEl);
+    });
+}
+
+// Inizializza il calendario quando si apre l'app
+document.getElementById('calendar-app').addEventListener('show', updateCalendar);
   </script>
 </body>
 </html>
