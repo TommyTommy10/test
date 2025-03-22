@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
   <title>Buon Compleanno!</title>
   <style>
     * {
@@ -618,6 +621,51 @@
 .pin-button:active {
   background: rgba(255,255,255,0.2);
 }
+
+/* Effetti di animazione */
+.app-icon, .dock-icon {
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.app-icon:active, .dock-icon:active {
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+
+/* Effetto sfondo sfocato */
+.home-screen {
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Effetti di swipe */
+.app-screen {
+    transition: transform 0.3s ease-out;
+    transform: translateX(100%);
+}
+
+.app-screen.active {
+    transform: translateX(0);
+}
+
+/* Effetto rimbalzo per le icone */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.app:hover .app-icon {
+    animation: bounce 0.5s ease infinite;
+}
+
+/* Miglioramenti visivi per il dock */
+.dock {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    margin: 0 10px 10px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
   </style>
 </head>
 <body>
@@ -1118,6 +1166,148 @@ document.getElementById('lock-screen').addEventListener('touchstart', e => {
 
 document.getElementById('lock-screen').addEventListener('touchend', e => {
   clearTimeout(pressTimer);
+});
+
+// Animazioni app più fluide
+function openApp(appName) {
+    const homeScreen = document.getElementById('home-screen');
+    const appScreen = document.getElementById(appName + '-app');
+    
+    homeScreen.style.opacity = '0';
+    homeScreen.style.display = 'none';
+    
+    appScreen.style.display = 'flex';
+    setTimeout(() => {
+        appScreen.classList.add('active');
+    }, 50);
+}
+
+function closeApp(appName) {
+    const homeScreen = document.getElementById('home-screen');
+    const appScreen = document.getElementById(appName + '-app');
+    
+    appScreen.classList.remove('active');
+    setTimeout(() => {
+        appScreen.style.display = 'none';
+        homeScreen.style.display = 'flex';
+        homeScreen.style.opacity = '1';
+    }, 300);
+}
+
+// Effetti di vibrazione per le interazioni
+function vibrateDevice() {
+    if (navigator.vibrate) {
+        navigator.vibrate(50);
+    }
+}
+
+// Aggiorna dinamicamente lo sfondo della home
+function updateHomeBackground() {
+    const hour = new Date().getHours();
+    let timeOfDay;
+    
+    if (hour >= 5 && hour < 12) timeOfDay = 'morning';
+    else if (hour >= 12 && hour < 17) timeOfDay = 'afternoon';
+    else if (hour >= 17 && hour < 20) timeOfDay = 'evening';
+    else timeOfDay = 'night';
+    
+    document.querySelector('.home-screen').style.backgroundImage = 
+        `url('https://source.unsplash.com/random/320x650/?${timeOfDay},nature')`;
+}
+
+// Effetto parallasse sullo sfondo
+function initParallax() {
+    const homeScreen = document.querySelector('.home-screen');
+    
+    window.addEventListener('deviceorientation', (event) => {
+        const x = event.beta * 0.2; // -180° to 180°
+        const y = event.gamma * 0.2; // -90° to 90°
+        
+        homeScreen.style.backgroundPosition = `calc(50% + ${y}px) calc(50% + ${x}px)`;
+    });
+}
+
+// Sistema di notifiche
+function showNotification(title, message) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, { body: message });
+    } else if ('Notification' in window && Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                new Notification(title, { body: message });
+            }
+        });
+    }
+}
+
+// Calendario interattivo
+function makeCalendarInteractive() {
+    const calendarDays = document.querySelectorAll('.calendar-day');
+    calendarDays.forEach(day => {
+        day.addEventListener('click', () => {
+            if (!day.classList.contains('other-month')) {
+                vibrateDevice();
+                const events = getEventsForDay(day.innerText);
+                if (events.length > 0) {
+                    alert(`Eventi del ${day.innerText}:\n${events.join('\n')}`);
+                }
+            }
+        });
+    });
+}
+
+function getEventsForDay(day) {
+    const events = [];
+    if (day === '24') {
+        events.push('🎂 Il tuo compleanno!');
+        events.push('🎉 Festa sorpresa');
+        events.push('🎁 Apertura regali');
+    }
+    return events;
+}
+
+// Batteria e ora dinamica
+function updateStatusBar() {
+    const timeElement = document.querySelector('.status-bar .time');
+    const batteryElement = document.querySelector('.status-bar .battery');
+    
+    if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+            batteryElement.textContent = `${Math.round(battery.level * 100)}%`;
+        });
+    }
+    
+    function updateTime() {
+        const now = new Date();
+        timeElement.textContent = now.toLocaleTimeString('it-IT', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+    }
+    
+    updateTime();
+    setInterval(updateTime, 1000);
+}
+
+// Inizializzazione
+document.addEventListener('DOMContentLoaded', () => {
+    updateHomeBackground();
+    initParallax();
+    makeCalendarInteractive();
+    updateStatusBar();
+    
+    // Richiedi il permesso per le notifiche
+    if ('Notification' in window) {
+        Notification.requestPermission();
+    }
+    
+    // Aggiorna lo sfondo ogni ora
+    setInterval(updateHomeBackground, 3600000);
+});
+
+// Aggiungi eventi touch per tutte le app
+document.querySelectorAll('.app, .dock-icon').forEach(element => {
+    element.addEventListener('touchstart', vibrateDevice);
 });
   </script>
 </body>
